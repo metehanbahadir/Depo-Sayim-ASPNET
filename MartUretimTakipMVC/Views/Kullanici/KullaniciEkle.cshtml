@@ -1,0 +1,45 @@
+﻿@model MartUretimTakipMVC.Models.Database.Yonetici
+@{
+    ViewBag.Title = "Kullanıcı Ekle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script>
+    function oturumuKapat() {
+        $.ajax({
+            url: '/Giris/CikisYap', // Oturumu kapatma işlemini gerçekleştirecek MVC controller'ın URL'sini belirtin
+            type: 'POST',
+            dataType: 'json',
+        });
+    }
+
+    // Sekme kapatıldığında oturumu kapatma işlemi
+    window.onunload = function () {
+        oturumuKapat();
+    }
+
+    window.onload = function () {
+        document.getElementById("YoneticiID").focus();
+    }
+</script>
+<br />
+<h2>Kullanıcı Ekle</h2>
+<br />
+<form class="form-group" method="post">
+    @Html.LabelFor(x => x.YoneticiID)<span style="color:red; padding-left:5px;">*</span>
+    @Html.TextBoxFor(x => x.YoneticiID, new { id = "YoneticiID", style = "width:380px; text-align:center; font-size:19px; ", required = "required", autocomplete = "off", @class = "form-control" })
+    <br />
+    @Html.LabelFor(x => x.YoneticiIsim)<span style="color:red; padding-left:5px;">*</span>
+    @Html.TextBoxFor(x => x.YoneticiIsim, new { style = "width:380px; text-align:center; font-size:19px; ", required = "required", autocomplete = "off", @class = "form-control" })
+    <br />
+    @Html.LabelFor(x => x.YoneticiSifre)<span style="color:red; padding-left:5px;">*</span>
+    @Html.TextBoxFor(x => x.YoneticiSifre, new { style = "width:380px; text-align:center; font-size:19px; ", required = "required", autocomplete = "off", @class = "form-control" })
+    <br />
+    @Html.LabelFor(x => x.YoneticiGorev)<span style="color:red; padding-left:5px;">*</span>
+    @Html.TextBoxFor(x => x.YoneticiGorev, new { style = "width:380px; text-align:center; font-size:19px; ", required = "required", autocomplete = "off", @class = "form-control" })
+    <br />
+    @Html.LabelFor(x => x.YoneticiYetki)<span style="color:red; padding-left:5px;">*</span>
+    @Html.TextBoxFor(x => x.YoneticiYetki, new { style = "width:380px; text-align:center; font-size:19px; ", required = "required", autocomplete = "off", @class = "form-control" })
+    <br />
+    <button class="btn btn-primary">Ekle</button>
+</form>
+

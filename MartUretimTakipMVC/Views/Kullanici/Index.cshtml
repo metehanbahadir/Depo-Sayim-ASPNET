@@ -1,0 +1,49 @@
+﻿@using MartUretimTakipMVC.Models.Database
+@model List<Yonetici>
+@{
+    ViewBag.Title = "Kullanıcılar";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script src="https://kit.fontawesome.com/b4ef86249b.js" crossorigin="anonymous"></script>
+<script>
+    function oturumuKapat() {
+        $.ajax({
+            url: '/Giris/CikisYap', // Oturumu kapatma işlemini gerçekleştirecek MVC controller'ın URL'sini belirtin
+            type: 'POST',
+            dataType: 'json',
+        });
+    }
+
+    // Sekme kapatıldığında oturumu kapatma işlemi
+    window.onunload = function () {
+        oturumuKapat();
+    }
+</script>
+<br />
+<h3>Kullanıcılar | <span>Toplam Kullanıcı: @ViewBag.ToplamKullanici</span></h3>
+<br />
+<a href="/Kullanici/KullaniciEkle" class="btn btn-primary" title="Kullanıcı Ekle" style="margin-left:10px;"><i class="fa fa-user-plus"></i></a>
+<br />
+<br />
+<table class="table table-hover" style="width:800px;">
+    <tr>
+        <th style="padding-left:17px;">Yönetici</th>
+        <th style="padding-left:40px;">ID</th>
+        <th style="padding-left:30px;">Şifre</th>
+        <th style="padding-left:30px;">Görev</th>
+        <th>Yetki</th>
+        <th colspan="2" style="padding-left:40px;">İşlemler</th>
+    </tr>
+    @foreach (var k in Model)
+    {
+        <tr>
+            <td>@k.YoneticiIsim</td>
+            <td>@k.YoneticiID</td>
+            <td>@k.YoneticiSifre</td>
+            <td>@k.YoneticiGorev</td>
+            <td style="padding-left:22px;">@k.YoneticiYetki</td>
+            <td><a href="/Kullanici/KullaniciGetir/@k.KayıtID" class="btn btn-warning" title="Kullanıcı Düzenle" style="background-color:orange; color:white;"><i class="fa-solid fa-user-pen"></i></a></td>
+            <td>@Html.ActionLink("Sil", "KullaniciSil", new { id = k.KayıtID }, new { style = "color:white;", @class = "btn btn-danger", onclick = "return confirm('Kullanıcıyı silmek istediğinize emin misiniz?')" })</td>
+        </tr>
+    }
+</table>

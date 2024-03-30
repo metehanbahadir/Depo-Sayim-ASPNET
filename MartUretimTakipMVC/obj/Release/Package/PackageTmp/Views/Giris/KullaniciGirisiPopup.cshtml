@@ -1,0 +1,39 @@
+﻿@model MartUretimTakipMVC.Models.Database.Yonetici
+@{
+    ViewBag.Title = "Kullanıcı Girişi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<br />
+<h2>Kullanıcı Girişi</h2>
+<br />
+<script>
+    window.onload = function () {
+        $('#KullaniciGirisiModal').modal('show');
+
+        document.getElementById("YoneticiID").focus();
+    }
+</script>
+<div class="modal" id="KullaniciGirisiModal">
+    <div class="modal-dialog" style="width:450px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Kullanıcı Girişi</h3>
+                <span style="color:red; font-size:19px; padding-right:35px; padding-top:10px;">@ViewBag.BasarisizGiris</span>
+            </div>
+            <form class="modal-body" style="margin-left:20px;" method="post" action="/Giris/KullaniciGirisi">
+                @Html.LabelFor(x => x.YoneticiID)
+                @Html.TextBoxFor(x => x.YoneticiID, new { id="YoneticiID", tabindex = "1", style = "width:350px;", required = "required", autocomplete = "off", @class = "form-control" })
+                <br />
+                @Html.LabelFor(x => x.YoneticiSifre)
+                @Html.TextBoxFor(x => x.YoneticiSifre, new { tabindex = "2", style = "width:350px;", required = "required", autocomplete = "off", @class = "form-control" })
+                <br />
+                <button class="btn btn-primary" tabindex="3">Giriş Yap</button>
+                <br />
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+

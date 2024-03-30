@@ -1,0 +1,73 @@
+﻿@model MartUretimTakipMVC.Models.Database.GecmisHareket
+@{
+    ViewBag.Title = " Sayım Geri Al";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script>
+    function oturumuKapat() {
+        $.ajax({
+            url: '/Giris/CikisYap', // Oturumu kapatma işlemini gerçekleştirecek MVC controller'ın URL'sini belirtin
+            type: 'POST',
+            dataType: 'json',
+        });
+    }
+
+    // Sekme kapatıldığında oturumu kapatma işlemi
+    window.onunload = function () {
+        oturumuKapat();
+    }
+
+    function isChar(evt) {
+        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+        if ((iKeyCode < 48 || iKeyCode > 57))
+            return false;
+
+        return true;
+    }
+</script>
+<h3>Sayım Geri Al</h3>
+<br />
+<h3 style="color:red;">@ViewBag.Msg</h3>
+@using (Html.BeginForm("SayimGeriAl", "GecmisHareket", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.HiddenFor(x => x.HareketID)
+        @Html.LabelFor(x => x.EklenmeTarihi)
+        @Html.TextBoxFor(x => x.EklenmeTarihi, new { style = "width:300px; text-align:center; font-size:19px;  ", required = "required", disabled = "disabled", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.DuzenlenmeTarihi)
+        @Html.TextBoxFor(x => x.DuzenlenmeTarihi, new { style = "width:300px; text-align:center; font-size:19px;  ", required = "required", disabled = "disabled", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.StokKodu)
+        @Html.TextBoxFor(x => x.StokKodu, new { style = "width:300px; text-align:center; font-size:19px;  ", onkeypress = "javascript:return isChar(event)", autocomplete = "off", required = "required", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.DID)
+        @Html.TextBoxFor(x => x.DID, new { style = "width:300px; text-align:center; font-size:19px;  ", onkeypress = "javascript:return isChar(event)", autocomplete = "off", required = "required", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.Parti)
+        @Html.TextBoxFor(x => x.Parti, new { style = "width:300px; text-align:center; font-size:19px;  ", onkeypress = "javascript:return isChar(event)", autocomplete = "off", required = "required", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.Lot)
+        @Html.TextBoxFor(x => x.Lot, new { style = "width:300px; text-align:center; font-size:19px;  ", onkeypress = "javascript:return isChar(event)", autocomplete = "off", required = "required", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.OncekiAdet)
+        @Html.TextBoxFor(x => x.OncekiAdet, new { style = "width:300px; text-align:center; font-size:19px;  ", autocomplete = "off", disabled="disabled", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.SonrakiAdet)
+        @Html.TextBoxFor(x => x.SonrakiAdet, new { style = "width:300px; text-align:center; font-size:19px;  ", onkeypress = "javascript:return isChar(event)", autocomplete = "off", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.Duzenlenecek)
+        @Html.TextBoxFor(x => x.Duzenlenecek, new { style = "width:300px; text-align:center; font-size:19px;  ", required = "required", disabled="disabled", autocomplete = "off", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.Duzenlendi)
+        @Html.TextBoxFor(x => x.Duzenlendi, new { style = "width:300px; text-align:center; font-size:19px;  ", required = "required", autocomplete = "off", disabled="disabled", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.Depo)
+        @Html.TextBoxFor(x => x.Depo, new { style = "width:300px; text-align:center; font-size:19px;  ", onkeypress = "javascript:return isChar(event)", autocomplete = "off", required = "required", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.Kullanici)
+        @Html.TextBoxFor(x => x.Kullanici, new { style = "width:300px; text-align:center; font-size:19px;  ", disabled = "disabled", @class = "form-control" })
+        <br />
+        <button class="btn btn-primary">Kaydet</button>
+    </div>
+}

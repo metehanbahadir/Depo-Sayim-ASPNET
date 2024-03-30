@@ -1,0 +1,72 @@
+﻿@model MartUretimTakipMVC.Models.Database.DepoSayim
+@{
+    ViewBag.Title = "Sayım Ekle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script>
+    function oturumuKapat() {
+        $.ajax({
+            url: '/Giris/CikisYap', // Oturumu kapatma işlemini gerçekleştirecek MVC controller'ın URL'sini belirtin
+            type: 'POST',
+            dataType: 'json',
+        });
+    }
+
+    // Sekme kapatıldığında oturumu kapatma işlemi
+    window.onunload = function () {
+        oturumuKapat();
+    }
+</script>
+<br />
+<h3>Depo Sayım Ekle</h3>
+<br />
+<span style="color:red; font-size:19px; padding-left:50px;">@ViewBag.Msg</span>
+<script>
+    // Textboxlara sadece sayı girişi : QR
+    function isNumber(evt) {
+        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+        if (iKeyCode < 8 || iKeyCode > 57)
+            return false;
+
+        return true;
+    }
+    // Textboxlara sadece sayı girişi : Adet
+    function isChar(evt) {
+        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+        if ((iKeyCode < 48 || iKeyCode > 57))
+            return false;
+
+        return true;
+    }
+</script>
+    <form class="form-group" method="post">
+        @Html.LabelFor(x => x.QRData)<span style="color:red; padding-left:5px;">*</span>
+        @Html.TextBoxFor(x => x.QRData, new { @tabindex = "1", onkeypress = "javascript:return isNumber(event)", style = "width:380px; text-align:center; font-size:19px;  ", required = "required", autofocus = "autofocus", autocomplete = "off", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.EklenmeTarih)
+        @Html.TextBoxFor(x => x.EklenmeTarih, new { @Value = @ViewBag.EklenmeTarihi, style = "width:380px; text-align:center; font-size:19px;  ", disabled = "disabled", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.StokKodu)
+        @Html.TextBoxFor(x => x.StokKodu, new { @Value = @ViewBag.StokKodu, style = "width:380px; text-align:center; font-size:19px;  ", disabled = "disabled", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.DID)
+        @Html.TextBoxFor(x => x.DID, new { @Value = @ViewBag.DID, style = "width:380px; text-align:center; font-size:19px; ", autocomplete = "off", disabled = "disabled", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.Parti)
+        @Html.TextBoxFor(x => x.Parti, new { @Value = @ViewBag.Parti, style = "width:380px; text-align:center; font-size:19px;  ", disabled = "disabled", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.Lot)
+        @Html.TextBoxFor(x => x.Lot, new { @Value = @ViewBag.Lot, style = "width:380px; text-align:center; font-size:19px;  ", disabled = "disabled", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.Adet)<span style="color:red; padding-left:5px;">*</span>
+        @Html.TextBoxFor(x => x.Adet, new { @Value = @ViewBag.Adet, @tabindex = "2", onkeypress = "javascript:return isChar(event)", style = "width:380px; text-align:center; font-size:19px;  ", autocomplete = "off", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.Depo)
+        @Html.TextBoxFor(x => x.Depo, new { @Value = @ViewBag.Depo, style = "width:380px; text-align:center; font-size:19px;  ", disabled = "disabled", required = "required", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.Kullanici)
+        @Html.TextBoxFor(x => x.Kullanici, new { @Value = @ViewBag.Kullanici, style = "width:380px; text-align:center; font-size:19px;  ", disabled = "disabled", @class = "form-control" })
+        <br />
+        <button class="btn btn-primary" tabindex="3">Ekle</button>
+    </form>
+

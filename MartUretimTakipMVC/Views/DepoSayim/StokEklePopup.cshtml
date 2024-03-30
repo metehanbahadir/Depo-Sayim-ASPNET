@@ -1,0 +1,115 @@
+﻿@model MartUretimTakipMVC.Models.Database.DepoSayim
+@{
+    ViewBag.Title = "İşlemler";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script src="https://kit.fontawesome.com/b4ef86249b.js" crossorigin="anonymous"></script>
+<script>
+    function oturumuKapat() {
+        $.ajax({
+            url: '/Giris/CikisYap', // Oturumu kapatma işlemini gerçekleştirecek MVC controller'ın URL'sini belirtin
+            type: 'POST',
+            dataType: 'json',
+        });
+    }
+
+    // Sekme kapatıldığında oturumu kapatma işlemi
+    window.onunload = function () {
+        oturumuKapat();
+    }
+
+    window.onload = function () {
+        $('#StokEkleModal').modal('show');
+
+        document.getElementById("QRData").focus();
+        document.getElementById("QRData").value = null;
+        document.getElementById("Adet").value = null;
+    }
+</script>
+<br />
+<h2>İşlemler</h2>
+<br />
+<div class="modal" id="StokEkleModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <br />
+            <div class="modal-header">
+                <h3>Depo Sayım Ekle</h3>
+            </div>
+            <br />
+            <span style="color:red; font-size:19px; padding-left:50px;">@ViewBag.Msg</span><span style="color:green; font-size:19px; padding-left:50px;">@ViewBag.BasariMsg</span>
+            <script>
+                // Textboxlara sadece sayı girişi : QR
+                function isNumber(evt) {
+                    var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+                    if ((iKeyCode < 48 || iKeyCode > 57) && iKeyCode != 36 && iKeyCode != 13)
+                        return false;
+
+                    return true;
+                }
+
+                // Textboxlara sadece sayı girişi : Adet
+                function isChar(evt) {
+                    var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+                    if ((iKeyCode < 48 || iKeyCode > 57) && iKeyCode != 13)
+                        return false;
+
+                    return true;
+                }
+
+                function VeriAyristir() {
+                    var QRData = document.getElementById("QRData").value;
+
+                    document.getElementById("StokKodu").value = QRData.substring(0, 8);
+                    document.getElementById("DID").value = QRData.substring(9, 24);
+                    document.getElementById("Parti").value = QRData.substring(17, 19);
+                    document.getElementById("Lot").value = QRData.substring(19, 24);
+
+                    for (var i = 25; i < 35; i++) {
+                        var dolar3 = QRData.charAt(i);
+                        if (dolar3.toString() != "$") //ilk dolardan sonraki karakter dolar mı kontrolü sağlanıyor
+                        {
+                            dolar3++;
+                        }
+                        else {
+                            var dolar3 = i;
+                            var stokadet = QRData.substring(25, dolar3);
+                            document.getElementById("Adet").value = stokadet;
+                            document.getElementById("Depo").value = QRData.charAt(dolar3 + 1);
+                        }
+                    }
+                }
+            </script>
+            <form style="margin-left:30px;" class="modal-body" method="post" action="/DepoSayim/StokEkle">
+                @Html.LabelFor(x => x.QRData)<span style="color:red; padding-left:5px;">*</span>
+                @Html.TextBoxFor(x => x.QRData, new { id = "QRData", onkeypress = "javascript:return isNumber(event)", style = "width:380px; text-align:center; font-size:19px;  ", required = "required", autofocus = "autofocus", autocomplete = "off", @class = "form-control" })<a title="Ayrıştır (Alt+A)" accesskey="a" style="float:right; color:white;" onclick="VeriAyristir()" class="btn btn-primary"><i class="fa-solid fa-rotate"></i></a>
+                <br />
+                @Html.LabelFor(x => x.EklenmeTarih)
+                @Html.TextBoxFor(x => x.EklenmeTarih, new { id = "EklenmeTarihi", style = "width:380px; text-align:center; font-size:19px;  ", disabled = "disabled", @class = "form-control" })
+                <br />
+                @Html.LabelFor(x => x.StokKodu)
+                @Html.TextBoxFor(x => x.StokKodu, new { id = "StokKodu", @value = "@ViewBag.StokKodu", style = "width:380px; text-align:center; font-size:19px;  ", disabled = "disabled", @class = "form-control" })
+                <br />
+                @Html.LabelFor(x => x.DID)
+                @Html.TextBoxFor(x => x.DID, new { id = "DID", style = "width:380px; text-align:center; font-size:19px; ", autocomplete = "off", disabled = "disabled", @class = "form-control" })
+                <br />
+                @Html.LabelFor(x => x.Parti)
+                @Html.TextBoxFor(x => x.Parti, new { id = "Parti", style = "width:380px; text-align:center; font-size:19px;  ", disabled = "disabled", @class = "form-control" })
+                <br />
+                @Html.LabelFor(x => x.Lot)
+                @Html.TextBoxFor(x => x.Lot, new { id = "Lot", style = "width:380px; text-align:center; font-size:19px;  ", disabled = "disabled", @class = "form-control" })
+                <br />
+                @Html.LabelFor(x => x.Adet)<span style="color:red; padding-left:5px;">*</span> <span style="padding-left:50px; color:red;"> Ayrıştırma: ALT + A</span>
+                @Html.TextBoxFor(x => x.Adet, new { id = "Adet", onkeypress = "javascript:return isChar(event)", style = "width:380px; text-align:center; font-size:19px;  ", required = "required", autocomplete = "off", @class = "form-control" })
+                <br />
+                @Html.LabelFor(x => x.Depo)
+                @Html.TextBoxFor(x => x.Depo, new { id = "Depo", style = "width:380px; text-align:center; font-size:19px;  ", disabled = "disabled", required = "required", @class = "form-control" })
+                <br />
+                @Html.LabelFor(x => x.Kullanici)
+                @Html.TextBoxFor(x => x.Kullanici, new { style = "width:380px; text-align:center; font-size:19px;  ", disabled = "disabled", @class = "form-control" })
+                <br />
+                <button class="btn btn-primary">Ekle</button>
+            </form>
+        </div>
+    </div>
+</div>

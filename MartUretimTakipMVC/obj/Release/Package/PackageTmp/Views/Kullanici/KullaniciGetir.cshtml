@@ -1,0 +1,48 @@
+﻿@model MartUretimTakipMVC.Models.Database.Yonetici
+@{
+    ViewBag.Title = "Kullanıcı Düzenle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script>
+    function oturumuKapat() {
+        $.ajax({
+            url: '/Giris/CikisYap', // Oturumu kapatma işlemini gerçekleştirecek MVC controller'ın URL'sini belirtin
+            type: 'POST',
+            dataType: 'json',
+        });
+    }
+
+    // Sekme kapatıldığında oturumu kapatma işlemi
+    window.onunload = function () {
+        oturumuKapat();
+    }
+</script>
+<br />
+<h2>Kullanıcı Düzenleme</h2>
+<br />
+@using (Html.BeginForm("KullaniciDuzenle", "Kullanici", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.HiddenFor(x => x.KayıtID)
+        @Html.LabelFor(x => x.YoneticiIsim)
+        @Html.TextBoxFor(x => x.YoneticiIsim, new { style = "width:380px; text-align:center; font-size:19px; ", required = "required", autocomplete = "off", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.YoneticiID)
+        @Html.TextBoxFor(x => x.YoneticiID, new { style = "width:380px; text-align:center; font-size:19px; ", required = "required", autocomplete = "off", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.YoneticiSifre)
+        @Html.TextBoxFor(x => x.YoneticiSifre, new { style = "width:380px; text-align:center; font-size:19px; ", required = "required", autocomplete = "off", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.YoneticiGorev)
+        @Html.TextBoxFor(x => x.YoneticiGorev, new { style = "width:380px; text-align:center; font-size:19px; ", required = "required", autocomplete = "off", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.YoneticiYetki)
+        @Html.TextBoxFor(x => x.YoneticiYetki, new { style = "width:380px; text-align:center; font-size:19px; ", required = "required", autocomplete = "off", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.YoneticiDurum)
+        @Html.TextBoxFor(x => x.YoneticiDurum, new { style = "width:380px; text-align:center; font-size:19px; ", required = "required", autocomplete = "off", @class = "form-control" })
+        <br />
+        <button class="btn btn-primary">Değişiklikleri Kaydet</button>
+    </div>
+}
+

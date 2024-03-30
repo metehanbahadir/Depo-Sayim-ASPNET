@@ -1,0 +1,94 @@
+﻿@using MartUretimTakipMVC.Models.Database
+@using PagedList
+@using PagedList.Mvc
+@model PagedList.IPagedList<MartUretimTakipMVC.Models.Database.DepoSayim>
+@{
+    ViewBag.Title = "Güncel Depo Sayımları";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script src="https://kit.fontawesome.com/b4ef86249b.js" crossorigin="anonymous"></script>
+<script>
+    function oturumuKapat() {
+        $.ajax({
+            url: '/Giris/CikisYap', // Oturumu kapatma işlemini gerçekleştirecek MVC controller'ın URL'sini belirtin
+            type: 'POST',
+            dataType: 'json',
+        });
+    }
+
+    // Sekme kapatıldığında oturumu kapatma işlemi
+    window.onunload = function () {
+        oturumuKapat();
+    }
+</script>
+<br />
+<h3>Güncel Depo Sayımları - Kullanıcı: <span style="color:blue;">@ViewBag.Kullanici</span> | Toplam Sayım: @ViewBag.ToplamSayim</h3>
+<br />
+<a href="/DepoSayim/StokEklePopup" accesskey="a" class="btn btn-primary" title="Sayım Ekle (Alt+A)" style="margin-left:5px;"><i class="fa fa-plus"></i></a>
+<a href="/DepoSayim/Filtrele" class="btn btn-warning" title="Düzenlenecek Sayımları Listele" style="background-color:orange; color:white; margin-left:5px;"><i class="fa fa-list"></i></a>
+<a href="/DepoSayim/TersSiralama" class="btn btn-warning" title="Ters Sıralama" style="background-color:orange; color:white; margin-left:5px;"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+<a href="/DepoSayim/ExcelAktarma" class="btn btn-primary" title="Excel Olarak Kaydet" style="background-color:green; color:white;  margin-left:5px;"><i class="fa-solid fa-file-excel"></i></a>
+<a href="/Giris/CikisYap" class="btn btn-warning" title="Çıkış Yap" style="margin-left:5px; background-color:red; color:white;"><i class="fa-solid fa-right-from-bracket"></i></a>
+<div style="float:right; margin-right:1000px;">
+    @using (Html.BeginForm("Filter", "DepoSayim", FormMethod.Get))
+    {
+        @Html.TextBox("filter")
+        <button type="submit">Ara</button>
+    }
+</div>
+<br />
+<br />
+<table class="table table-hover" id="GuncelSayimTable" style="width:1200px;">
+    <tr>
+        <th>Eklenme Tarihi</th>
+        <th>Düzenlenme Tarihi</th>
+        <th>Stok Kodu</th>
+        <th style="padding-left:60px;">DID</th>
+        <th>Parti</th>
+        <th style="padding-left:20px;">Lot</th>
+        <th>Adet</th>
+        <th>Depo</th>
+        <th>Kullanıcı</th>
+        <th>Düzenleyen</th>
+        <th>Düzenlenme</th>
+        <th>Düzenlendi</th>
+        <th>Not</th>
+        <th colspan="3" style="padding-left:70px;">İşlemler</th>
+    </tr>
+    @foreach (var ds in Model)
+    {
+        if (ds.Not != "-")
+        {
+            ds.Not = "Not Var";
+        }
+        else
+        {
+            ds.Not = "-";
+        }
+        <tr>
+            <td style="padding-left:10px;">@ds.EklenmeTarih</td>
+            <td style="padding-left:20px;">@ds.DuzenlenmeTarih</td>
+            <td>@ds.StokKodu</td>
+            <td>@ds.DID</td>
+            <td style="padding-left:22px;">@ds.Parti</td>
+            <td>@ds.Lot</td>
+            <td style="padding-left:15px;">@ds.Adet</td>
+            <td style="padding-left:25px;">@ds.Depo</td>
+            <td style="padding-left:20px;">@ds.Kullanici</td>
+            <td style="padding-left:30px;">@ds.DuzenleyenKullanici</td>
+            <td style="padding-left:50px;">@ds.Duzenlenecek</td>
+            <td style="padding-left:33px;">@ds.Duzenlendi</td>
+            <td id="NotRow">@ds.Not</td>
+            <td><a href="/DepoSayim/StokGetir/@ds.KayitID" class="btn btn-warning" title="Düzenle" style="background-color:orange; color:white; margin-left:10px;"><i class="fa-solid fa-pen"></i></a></td>
+            <td>@Html.ActionLink("Sil", "StokSil", new { id = ds.KayitID }, new { style = "color:white;", @class = "btn btn-danger", onclick = "return confirm('Silmek istediğinize emin misiniz?')" })</td>
+            <td><a id="btn_NotEkle" href="/DepoSayim/NotGetir/@ds.KayitID" class="btn btn-primary" title="Not Ekle">Not</a></td>
+        </tr>
+    }
+</table>
+@Html.PagedListPager((IPagedList)Model, sayfa => Url.Action("Index", new { sayfa }), new PagedListRenderOptions
+{
+    LiElementClasses = new List<string>
+    {"page-link"}    
+})
+
+

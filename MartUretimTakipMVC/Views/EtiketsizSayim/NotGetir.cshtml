@@ -1,0 +1,45 @@
+﻿@model MartUretimTakipMVC.Models.Database.EtiketsizSayim
+@{
+    ViewBag.Title = "Not Ekle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script src="https://kit.fontawesome.com/b4ef86249b.js" crossorigin="anonymous"></script>
+<script>
+    function oturumuKapat() {
+        $.ajax({
+            url: '/Giris/CikisYap', // Oturumu kapatma işlemini gerçekleştirecek MVC controller'ın URL'sini belirtin
+            type: 'POST',
+            dataType: 'json',
+        });
+    }
+
+    // Sekme kapatıldığında oturumu kapatma işlemi
+    window.onunload = function () {
+        oturumuKapat();
+    }
+
+    window.onload = function () {
+        $('#EtiketsizNotEkleModal').modal('show');
+
+        document.getElementById("Not").focus();
+    }
+</script>
+<br />
+<h2>İşlemler</h2>
+<br />
+<div class="modal" id="EtiketsizNotEkleModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Etiketsiz Sayım Not Ekle</h3>
+            </div>
+            <form class="modal-body" method="post" action="/EtiketsizSayim/NotEklePopup">
+                @Html.HiddenFor(x => x.KayitID)
+                @Html.LabelFor(x => x.Not)
+                @Html.TextBoxFor(x => x.Not, new { id = "Not", required = "required", autocomplete = "off", maxlength = "50", @class = "form-control" })
+                <br />
+                <button class="btn btn-primary">Kaydet</button>
+            </form>
+        </div>
+    </div>
+</div>

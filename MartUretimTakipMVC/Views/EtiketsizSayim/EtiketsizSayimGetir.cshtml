@@ -1,0 +1,56 @@
+﻿@model MartUretimTakipMVC.Models.Database.EtiketsizSayim
+@{
+    ViewBag.Title = "Etiketsiz Sayım Düzenle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script>
+    function oturumuKapat() {
+        $.ajax({
+            url: '/Giris/CikisYap', // Oturumu kapatma işlemini gerçekleştirecek MVC controller'ın URL'sini belirtin
+            type: 'POST',
+            dataType: 'json',
+        });
+    }
+
+    // Sekme kapatıldığında oturumu kapatma işlemi
+    window.onunload = function () {
+        oturumuKapat();
+    }
+    // Textboxlara sadece sayı girişi : Adet
+    function isChar(evt) {
+        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+        if ((iKeyCode < 48 || iKeyCode > 57))
+            return false;
+
+        return true;
+    }
+</script>
+<br />
+<h3>Stok Düzenleme</h3>
+<br />
+<h4 style="color:red;">@ViewBag.Msg</h4>
+@using (Html.BeginForm("EtiketsizSayimDuzenle", "EtiketsizSayim", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.HiddenFor(x => x.KayitID)
+        @Html.LabelFor(x => x.EklenmeTarih)
+        @Html.TextBoxFor(x => x.EklenmeTarih, new { style = "width:300px; text-align:center; font-size:19px;  ", required = "required", disabled = "disabled", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.DuzenlenmeTarih)
+        @Html.TextBoxFor(x => x.DuzenlenmeTarih, new { style = "width:300px; text-align:center; font-size:19px;  ", required = "required", disabled = "disabled", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.StokKodu)
+        @Html.TextBoxFor(x => x.StokKodu, new { style = "width:300px; text-align:center; font-size:19px;  ", onkeypress = "javascript:return isChar(event)", autocomplete = "off", required = "required", @class = "form-control" })
+        <br />       
+        @Html.LabelFor(x => x.OncekiAdet)
+        @Html.TextBoxFor(x=>x.OncekiAdet, new { style = "width:300px; text-align:center; font-size:19px;  ", onkeypress = "javascript:return isChar(event)", autocomplete = "off", required = "required", @class = "form-control" })<p style="font-size:15px; padding-left:60px;">Önceki Adet: <span style="color:red; font:bold 15px;">@ViewBag.OncekiAdet</span></p>
+        <br />
+        @Html.LabelFor(x => x.Adet)
+        @Html.TextBoxFor(x => x.Adet, new { style = "width:300px; text-align:center; font-size:19px;  ", onkeypress = "javascript:return isChar(event)", autocomplete = "off", required = "required", @class = "form-control" })
+        <br />     
+        @Html.LabelFor(x => x.Kullanici)
+        @Html.TextBoxFor(x => x.Kullanici, new { style = "width:300px; text-align:center; font-size:19px;  ", disabled = "disabled", @class = "form-control" })
+        <br />
+        <button class="btn btn-primary">Değişiklikleri Kaydet</button>
+    </div>
+}

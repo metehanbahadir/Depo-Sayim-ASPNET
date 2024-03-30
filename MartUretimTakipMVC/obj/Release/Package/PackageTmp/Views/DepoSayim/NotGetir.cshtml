@@ -1,0 +1,47 @@
+﻿@model MartUretimTakipMVC.Models.Database.DepoSayim
+@{
+    ViewBag.Title = "Not Ekle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<br />
+<h2>İşlemler</h2>
+<br />
+<script>
+    function oturumuKapat() {
+        $.ajax({
+            url: '/Giris/CikisYap', // Oturumu kapatma işlemini gerçekleştirecek MVC controller'ın URL'sini belirtin
+            type: 'POST',
+            dataType: 'json',
+        });
+    }
+
+    // Sekme kapatıldığında oturumu kapatma işlemi
+    window.onunload = function () {
+        oturumuKapat();
+    }
+
+    window.onload = function () {
+        $('#NotEkleModal').modal('show');
+        document.getElementById("Not").focus();
+    }
+</script>
+<div class="modal" id="NotEkleModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <br />
+            <span style="color:green; font-size:19px; padding-left:50px;">@ViewBag.BasariliNot</span><span style="color:red; font-size:19px; padding-left:50px;">@ViewBag.EklenmisNot</span>
+            <div class="modal-header">
+                <h3>Not Ekle</h3>
+            </div>
+            <br />
+            <form class="modal-body" style="margin-left:30px;" method="post" action="/DepoSayim/NotEklePopup">
+                @Html.HiddenFor(x => x.KayitID)
+                @Html.LabelFor(x => x.Not)
+                @Html.TextBoxFor(x => x.Not, new { id = "Not", style = "width:380px; text-align:center; font-size:19px;", maxlength = "50", autocomplete = "off", required = "required", @class = "form-control" })
+                <br />
+                <button class="btn btn-primary" tabindex="2">Kaydet</button>
+            </form>
+        </div>
+    </div>
+</div>
+

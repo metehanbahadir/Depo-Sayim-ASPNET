@@ -1,0 +1,88 @@
+﻿@using MartUretimTakipMVC.Models.Database
+@using PagedList
+@using PagedList.Mvc
+@model PagedList.IPagedList<MartUretimTakipMVC.Models.Database.GecmisHareket>
+@{
+    ViewBag.Title = "Geçmiş Hareketler";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script src="https://kit.fontawesome.com/b4ef86249b.js" crossorigin="anonymous"></script>
+<script>
+    function oturumuKapat() {
+        $.ajax({
+            url: '/Giris/CikisYap', // Oturumu kapatma işlemini gerçekleştirecek MVC controller'ın URL'sini belirtin
+            type: 'POST',
+            dataType: 'json',
+        });
+    }
+
+    // Sekme kapatıldığında oturumu kapatma işlemi
+    window.onunload = function () {
+        oturumuKapat();
+    }
+</script>
+<br />
+<h3>Geçmiş Depo Sayım Hareketleri - Toplam Hareket : @ViewBag.ToplamHareket</h3>
+<br />
+<a href="/GecmisHareket/TersSiralama" class="btn btn-warning" title="Ters Sıralama" style="background-color:orange; color:white; margin-left:5px;"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+<a href="/GecmisHareket/EtiketsizSayim" class="btn btn-primary" title="Etiketsiz Sayımları Listele"><i class="fa-solid fa-qrcode"></i></a>
+<a href="/GecmisHareket/SilinenSayimlar" style="margin-left:5px;" title="Silinen Sayımları Listele" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+<a href="/GecmisHareket/DuzenlenenSayimlar" style="margin-left:5px;" title="Düzenlenen Sayımları Listele" class="btn btn-warning"><i style="color:white;" class="fa fa-pen"></i></a>
+<a href="/GecmisHareket/ExcelAktarma" class="btn btn-primary" title="Excel Olarak Kaydet" style="margin-left:1000px;  background-color:green; color:white;  margin-left:5px;"><i class="fa-solid fa-file-excel"></i></a>
+<div style="float:right; margin-right:1000px;">
+    @using (Html.BeginForm("Filter", "GecmisHareket", FormMethod.Get))
+    {
+        @Html.TextBox("filter")
+        <button type="submit">Ara</button>
+    }
+</div>
+<br />
+<br />
+<table class="table table-hover" style="width:1200px;">
+    <tr>
+        <th>HareketID</th>
+        <th>Eklenme Tarihi</th>
+        <th>Düzenlenme Tarihi</th>
+        <th>Stok Kodu</th>
+        <th style="padding-left:55px;">DID</th>
+        <th>Parti</th>
+        <th>Lot</th>
+        <th>Önceki Adet</th>
+        <th>Sonraki Adet</th>
+        <th>Düzenlenecek</th>
+        <th>Düzenlendi</th>
+        <th>Depo</th>
+        <th>Durum</th>
+        <th>Kullanıcı</th>
+        <th>Düzenleyen</th>
+        <th>Not</th>
+        <th>İşlemler</th>
+    </tr>
+    @foreach (var gh in Model)
+    {
+        <tr>
+            <td style="padding-left:28px;">@gh.HareketID</td>
+            <td style="padding-left:10px;">@gh.EklenmeTarihi</td>
+            <td style="padding-left:20px;">@gh.DuzenlenmeTarihi</td>
+            <td>@gh.StokKodu</td>
+            <td>@gh.DID</td>
+            <td>@gh.Parti</td>
+            <td>@gh.Lot</td>
+            <td style="padding-left:35px;">@gh.OncekiAdet</td>
+            <td style="padding-left:20px;">@gh.SonrakiAdet</td>
+            <td style="padding-left:50px;">@gh.Duzenlenecek</td>
+            <td style="padding-left:35px;">@gh.Duzenlendi</td>
+            <td style="padding-left:25px;">@gh.Depo</td>
+            <td style="padding-left:25px;">@gh.Durum</td>
+            <td>@gh.Kullanici</td>
+            <td style="padding-left:25px;">@gh.DuzenleyenKullanici</td>
+            <td>@gh.Not</td>
+            <td><a id="SayimGeriAl" style="margin-left:15px;" class="btn btn-primary" title="Depo Sayımlarına Al" href="/GecmisHareket/SayimGetir/@gh.HareketID"><i class="fa-solid fa-arrows-rotate"></i></a></td>
+        </tr>
+    }
+</table>
+@Html.PagedListPager((IPagedList)Model, sayfa => Url.Action("Index", new { sayfa }), new PagedListRenderOptions
+{
+    LiElementClasses = new List<string>
+    {"page-link"}
+})

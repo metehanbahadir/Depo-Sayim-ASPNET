@@ -1,0 +1,61 @@
+﻿@model MartUretimTakipMVC.Models.Database.EtiketsizSayim
+@{
+    ViewBag.Title = "EtiketsizSayim";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script src="https://kit.fontawesome.com/b4ef86249b.js" crossorigin="anonymous"></script>
+<script>
+    function oturumuKapat() {
+        $.ajax({
+            url: '/Giris/CikisYap', // Oturumu kapatma işlemini gerçekleştirecek MVC controller'ın URL'sini belirtin
+            type: 'POST',
+            dataType: 'json',
+        });
+    }
+
+    // Sekme kapatıldığında oturumu kapatma işlemi
+    window.onunload = function () {
+        oturumuKapat();
+    }
+
+    window.onload = function () {
+        $('#EtiketsizSayimEkleModal').modal('show');
+
+        document.getElementById("StokKodu").focus();
+        document.getElementById("StokKodu").value = null;
+        document.getElementById("Adet").value = null;
+    }
+</script>
+<br />
+<h2>İşlemler</h2>
+<br />
+<div class="modal" id="EtiketsizSayimEkleModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <br />
+            <div class="modal-header">
+                <h2>Etiketsiz Sayım Ekle</h2>
+            </div>
+            <br />
+            <span style="color:red; font-size:19px; padding-left:50px;">@ViewBag.Msg</span><span style="color:green; font-size:19px; padding-left:50px;">@ViewBag.BasariMsg</span>
+            <script>
+                function isNumber(evt) {
+                    var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+                    if ((iKeyCode < 48 || iKeyCode > 57) && iKeyCode != 13)
+                        return false;
+
+                    return true;
+                }
+            </script>
+            <form class="modal-body" method="post" action="/EtiketsizSayim/EtiketsizSayimEklePopup">
+                @Html.LabelFor(x => x.StokKodu)
+                @Html.TextBoxFor(x => x.StokKodu, new { id = "StokKodu", onkeypress = "javascript:return isNumber(event)", required ="required", maxlength="8", autocomplete="off", @class = "form-control" })
+                <br />
+                @Html.LabelFor(x => x.Adet)
+                @Html.TextBoxFor(x => x.Adet, new { id = "Adet", onkeypress = "javascript:return isNumber(event)", required = "required", autocomplete = "off", @class = "form-control" })
+                <br />
+                <button class="btn btn-primary">Ekle</button>
+            </form>
+        </div>
+    </div>
+</div>

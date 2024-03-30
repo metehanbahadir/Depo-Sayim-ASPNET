@@ -1,0 +1,23 @@
+﻿@model MartUretimTakipMVC.Models.Database.Yonetici
+@{
+    ViewBag.Title = "Kullanıcı Girişi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<br />
+<h2>Kullanıcı Girişi</h2>
+<span style="color:red; font-size:19px; padding-left:90px;">@ViewBag.BasarisizGiris</span>
+<br />
+@using (Html.BeginForm("KullaniciGirisi", "Giris", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.LabelFor(x => x.YoneticiID)
+        @Html.TextBoxFor(x => x.YoneticiID, new { @tabindex = "1", style = "width:350px;", required = "required", autocomplete = "off", @class = "form-control" })
+        <br />
+        @Html.LabelFor(x => x.YoneticiSifre)
+        @Html.TextBoxFor(x => x.YoneticiSifre, new { @tabindex = "2", style = "width:350px;", required = "required", autocomplete = "off", @class = "form-control" })
+        <br />
+        <button class="btn btn-primary" tabindex="3">Giriş Yap</button>
+        <br />
+
+    </div>
+}
